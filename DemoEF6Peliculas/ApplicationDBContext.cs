@@ -6,20 +6,59 @@ using DemoEF6Peliculas.Entidades;
 using DemoEF6Peliculas.Entidades.Configuraciones;
 using DemoEF6Peliculas.Entidades.Seeding;
 using DemoEF6Peliculas.Entidades.SinLlaves;
+using DemoEF6Peliculas.Servicios;
 
 namespace DemoEF6Peliculas
 {
     public class ApplicationDBContext : DbContext
     {
-        public ApplicationDBContext(DbContextOptions options) : base(options)
+        private readonly IServicioUsuario servicioUsuario;
+
+        public ApplicationDBContext(DbContextOptions options, IServicioUsuario servicioUsuario) : base(options)
         {
+            this.servicioUsuario = servicioUsuario;
             // Do nothing
         }
 
         protected override void ConfigureConventions(ModelConfigurationBuilder builder)
         {
             builder.Properties<DateTime>().HaveColumnType("datetime");
+        }
 
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            ProcesaAuditables();
+            return base.SaveChangesAsync(cancellationToken);
+        }
+
+        private void ProcesaAuditables()
+        {
+            // Registros agregados
+            foreach(var item in ChangeTracker.Entries().Where(w => w.State == EntityState.Added && w.Entity is EntidadAuditable))
+            {
+                var entidad = item.Entity as EntidadAuditable;
+                entidad.CreadoPor = servicioUsuario.ObtenerUsuarioId();
+                entidad.ModificadorPor = null;
+                entidad.Borrado = false;
+                entidad.BorradoPor = null;
+            }
+
+            // Registros modificador
+            foreach (var item in ChangeTracker.Entries().Where(w => w.State == EntityState.Modified && w.Entity is EntidadAuditable))
+            {
+                var entidad = item.Entity as EntidadAuditable;
+                item.Property(nameof(entidad.CreadoPor)).IsModified = false;
+                if(!entidad.Borrado)
+                {
+                    entidad.ModificadorPor = servicioUsuario.ObtenerUsuarioId();
+                    item.Property(nameof(entidad.BorradoPor)).IsModified = false;
+                }
+                else
+                {
+                    item.Property(nameof(entidad.ModificadorPor)).IsModified = false;
+                    entidad.BorradoPor = servicioUsuario.ObtenerUsuarioId();
+                }
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder builder)

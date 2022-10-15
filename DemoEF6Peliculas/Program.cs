@@ -1,7 +1,9 @@
+using System.Text.Json.Serialization;
+
 using Microsoft.EntityFrameworkCore;
 
 using DemoEF6Peliculas;
-using System.Text.Json.Serialization;
+using DemoEF6Peliculas.Servicios;
 
 
 // Inicializacion
@@ -31,6 +33,9 @@ builder.Services.AddControllers().AddJsonOptions(options =>
         options.JsonSerializerOptions.PropertyNamingPolicy = null;
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
     });
+
+// Usuario
+builder.Services.AddScoped<IServicioUsuario, ServicioUsuario>();
 
 // Automapper
 builder.Services.AddAutoMapper(typeof(Program));

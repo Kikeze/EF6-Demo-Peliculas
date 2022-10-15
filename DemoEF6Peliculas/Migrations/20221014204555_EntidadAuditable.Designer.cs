@@ -4,6 +4,7 @@ using DemoEF6Peliculas;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 
@@ -12,9 +13,10 @@ using NetTopologySuite.Geometries;
 namespace DemoEF6Peliculas.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20221014204555_EntidadAuditable")]
+    partial class EntidadAuditable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -902,7 +904,7 @@ namespace DemoEF6Peliculas.Migrations
                         new
                         {
                             Id = 3,
-                            FechaTransaccion = new DateTime(2022, 9, 29, 18, 58, 46, 556, DateTimeKind.Local).AddTicks(5093),
+                            FechaTransaccion = new DateTime(2022, 9, 29, 15, 45, 55, 51, DateTimeKind.Local).AddTicks(7814),
                             Monto = 150m,
                             TipoPago = 1,
                             EMail = "prueba1@correo.com"
@@ -910,7 +912,7 @@ namespace DemoEF6Peliculas.Migrations
                         new
                         {
                             Id = 4,
-                            FechaTransaccion = new DateTime(2022, 10, 4, 18, 58, 46, 556, DateTimeKind.Local).AddTicks(5121),
+                            FechaTransaccion = new DateTime(2022, 10, 4, 15, 45, 55, 51, DateTimeKind.Local).AddTicks(7845),
                             Monto = 250m,
                             TipoPago = 1,
                             EMail = "prueba2@correo.com"
@@ -932,7 +934,7 @@ namespace DemoEF6Peliculas.Migrations
                         new
                         {
                             Id = 1,
-                            FechaTransaccion = new DateTime(2022, 10, 2, 18, 58, 46, 556, DateTimeKind.Local).AddTicks(5263),
+                            FechaTransaccion = new DateTime(2022, 10, 2, 15, 45, 55, 51, DateTimeKind.Local).AddTicks(7995),
                             Monto = 175m,
                             TipoPago = 2,
                             Ultimos4Digitos = "1234"
@@ -940,7 +942,7 @@ namespace DemoEF6Peliculas.Migrations
                         new
                         {
                             Id = 2,
-                            FechaTransaccion = new DateTime(2022, 10, 6, 18, 58, 46, 556, DateTimeKind.Local).AddTicks(5265),
+                            FechaTransaccion = new DateTime(2022, 10, 6, 15, 45, 55, 51, DateTimeKind.Local).AddTicks(7997),
                             Monto = 275m,
                             TipoPago = 2,
                             Ultimos4Digitos = "4321"

@@ -78,6 +78,37 @@ namespace DemoEF6Peliculas.Controllers
         }
 
         [HttpGet]
+        [Route("GetInQuery")]
+        public async Task<ActionResult<Genero>> GetInQuery(int Id)
+        {
+            //var genero = await dbcontext.Generos.Where(w => w.Id == Id).FirstOrDefaultAsync();
+
+            //var genero = await dbcontext.Generos
+            //    .FromSqlRaw("select * from generos where id = {0}", Id)
+            //    .IgnoreQueryFilters()
+            //    .FirstOrDefaultAsync();
+
+            var genero = await dbcontext.Generos
+                .FromSqlInterpolated($"select * from generos where id = {Id}")
+                .IgnoreQueryFilters()
+                .FirstOrDefaultAsync();
+
+            if (genero is null)
+            {
+                return NotFound();
+            }
+
+            var creacion = dbcontext.Entry(genero).Property<DateTime>("FechaCreacion").CurrentValue;
+
+            return Ok(new
+            {
+                Id = genero.Id,
+                Nombre = genero.Nombre,
+                Creacion = creacion
+            });
+        }
+
+        [HttpGet]
         [Route("Search")]
         public async Task<ActionResult<List<Genero>>> Search(string query)
         {

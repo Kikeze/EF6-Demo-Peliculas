@@ -6,8 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DemoEF6Peliculas.Entidades
 {
-    //[Index(nameof(Nombre), IsUnique = true)]
-    public class Genero
+    public class Genero : EntidadAuditable
     {
         public int Id { get; set; }
 
